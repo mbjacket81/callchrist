@@ -73,10 +73,13 @@ h2 { font-size: 1.45rem; margin: 2.5rem 0 0.75rem; }
 .btn-ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
 
 /* Moment page */
-.moment { padding: 3rem 0 1rem; }
+.moment { padding-top: 3rem; padding-bottom: 1rem; }
 .eyebrow { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.78rem; color: var(--muted); margin: 0 0 0.75rem; }
 .eyebrow a { color: var(--muted); text-decoration: none; }
 .opening { font-family: var(--serif); font-size: 1.25rem; color: var(--muted); margin: 0 0 2rem; }
+.jump { margin: -0.75rem 0 2rem; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+.prayer { scroll-margin-top: 1rem; }
 
 .verse {
   background: var(--verse-bg); border-left: 3px solid var(--accent);
