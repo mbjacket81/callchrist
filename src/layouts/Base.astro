@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+import { SITE } from '../site.config';
+
+interface Props {
+  title: string;
+  description?: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const { title, description = SITE.description, jsonLd } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE.url).toString().replace(/\/$/, '') || SITE.url;
+const fullTitle = title === SITE.name ? `${SITE.name} | ${SITE.tagline}` : `${title} | ${SITE.name}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#faf7f2" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+
+    {SITE.cfAnalyticsToken && (
+      <script
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={JSON.stringify({ token: SITE.cfAnalyticsToken })}
+      ></script>
+    )}
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap-wide">
+        <a class="logo" href="/">Call<span>Christ</span></a>
+        <nav>
+          <a href="/moments">Hard moments</a>
+          <a href="/about">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap-wide">
+        <p>
+          "Call unto me, and I will answer thee." Jeremiah 33:3
+        </p>
+        <p>
+          Scripture quotations are from the {SITE.translationName}.
+          If you are in crisis or thinking about suicide, call or text <a href="tel:988">988</a> (US) or your local emergency number.
+        </p>
+        <p>
+          <a href="/moments">All moments</a> · <a href="/about">About</a> · <a href="/privacy">Privacy</a>
+          {SITE.donateUrl && <> · <a href={SITE.donateUrl}>Support this ministry</a></>}
+        </p>
+        <p>© {new Date().getFullYear()} {SITE.name}</p>
+      </div>
+    </footer>
+  </body>
+</html>

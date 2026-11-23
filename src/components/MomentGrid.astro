@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import { CATEGORIES, type CategoryKey } from '../categories';
+
+const all = (await getCollection('moments')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+const groups = (Object.keys(CATEGORIES) as CategoryKey[])
+  .map((key) => ({ key, label: CATEGORIES[key], items: all.filter((m) => m.data.category === key) }))
+  .filter((g) => g.items.length > 0);
+---
+{groups.map((g) => (
+  <section class="category" id={g.key}>
+    <h2>{g.label}</h2>
+    <div class="grid">
+      {g.items.map((m) => (
+        <a class="card" href={`/moments/${m.id}`}>
+          <strong>{m.data.title}</strong>
+          <span>{m.data.verses[0].ref}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+))}

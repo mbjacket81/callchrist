@@ -1,0 +1,21 @@
+---
+import { SITE } from '../site.config';
+const action = SITE.newsletterAction;
+---
+<section class="signup" aria-labelledby="signup-title">
+  <h2 id="signup-title">A verse and a prayer each morning</h2>
+  <p>One short email a day to help you call on Christ, whatever today brings. Free, and you can unsubscribe anytime.</p>
+  {action ? (
+    <form action={action} method="post">
+      <label class="skip" for="signup-email">Email address</label>
+      <input id="signup-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+      <button class="btn" type="submit">Send me the daily prayer</button>
+    </form>
+  ) : (
+    <form onsubmit="event.preventDefault(); this.querySelector('button').textContent='Coming soon, thank you!';">
+      <label class="skip" for="signup-email">Email address</label>
+      <input id="signup-email" type="email" name="email" placeholder="you@example.com" required autocomplete="email" />
+      <button class="btn" type="submit">Send me the daily prayer</button>
+    </form>
+  )}
+</section>

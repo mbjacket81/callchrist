@@ -1,0 +1,89 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Signup from '../../components/Signup.astro';
+import CrisisNote from '../../components/CrisisNote.astro';
+import { SITE } from '../../site.config';
+import { CATEGORIES } from '../../categories';
+
+export async function getStaticPaths() {
+  const all = await getCollection('moments');
+  return all.map((entry) => ({ params: { slug: entry.id }, props: { entry, all } }));
+}
+
+const { entry, all } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+
+// Use the related list from frontmatter, then fill from the same category, up to 4.
+const byId = new Map(all.map((e) => [e.id, e]));
+const related = [
+  ...d.related.map((s) => byId.get(s)).filter(Boolean),
+  ...all.filter((e) => e.data.category === d.category && e.id !== entry.id && !d.related.includes(e.id)),
+].slice(0, 4);
+
+const url = `${SITE.url}/moments/${entry.id}`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: d.seoTitle,
+      description: d.description,
+      datePublished: d.published.toISOString(),
+      dateModified: (d.updated ?? d.published).toISOString(),
+      mainEntityOfPage: url,
+      publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url },
+        { '@type': 'ListItem', position: 2, name: 'Hard moments', item: `${SITE.url}/moments` },
+        { '@type': 'ListItem', position: 3, name: d.title, item: url },
+      ],
+    },
+  ],
+};
+---
+<Base title={d.seoTitle} description={d.description} jsonLd={jsonLd}>
+  <article class="moment wrap">
+    <p class="eyebrow"><a href="/moments">Hard moments</a> · {CATEGORIES[d.category]}</p>
+    <h1>{d.title}</h1>
+    <p class="opening">{d.opening}</p>
+
+    {d.showCrisisNote && <CrisisNote />}
+
+    <section aria-label="Scripture">
+      {d.verses.map((v) => (
+        <blockquote class="verse">
+          <p>{v.text}</p>
+          <cite>{v.ref} ({SITE.translation})</cite>
+        </blockquote>
+      ))}
+    </section>
+
+    <section class="prose">
+      <Content />
+    </section>
+
+    <section class="prayer" id="pray" aria-labelledby="prayer-title">
+      <h2 id="prayer-title">Pray this now</h2>
+      {d.prayer.trim().split('\n').filter(Boolean).map((line) => <p>{line}</p>)}
+      <p class="amen">In Jesus' name, amen.</p>
+    </section>
+
+    <Signup />
+
+    {related.length > 0 && (
+      <section class="related">
+        <h2>You may also need</h2>
+        <ul>
+          {related.map((r) => (
+            <li><a href={`/moments/${r!.id}`}>{r!.data.title}</a></li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </article>
+</Base>

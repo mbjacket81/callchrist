@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import MomentGrid from '../components/MomentGrid.astro';
+import Signup from '../components/Signup.astro';
+import { SITE } from '../site.config';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.name,
+  url: SITE.url,
+  description: SITE.description,
+};
+---
+<Base title={SITE.name} jsonLd={jsonLd}>
+  <section class="hero wrap">
+    <h1>Hard moment? Start here.</h1>
+    <p>Whatever you're carrying right now, you can call on Christ. Pick what you're facing and pray with scripture.</p>
+    <a class="btn" href="#moments">Find your moment</a>
+    <p class="hero-verse">"Call upon me in the day of trouble: I will deliver thee." <span style="white-space:nowrap">Psalm 50:15</span></p>
+  </section>
+
+  <div class="wrap-wide" id="moments">
+    <MomentGrid />
+  </div>
+
+  <div class="wrap">
+    <Signup />
+  </div>
+</Base>
