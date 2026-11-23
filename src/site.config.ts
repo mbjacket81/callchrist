@@ -12,6 +12,13 @@ export const SITE = {
   // Leave empty to show the form in "coming soon" mode.
   newsletterAction: '',
 
+  // SendFox embed form ID (the data-form value from SendFox's embed code).
+  // When set, this is used instead of newsletterAction.
+  sendfoxFormId: 'm78p98',
+
+  // Google Tag Manager container ID. GA4 is configured inside GTM.
+  gtmId: 'GTM-5JRSSV4Q',
+
   // Cloudflare Web Analytics token (Dashboard > Analytics & Logs > Web Analytics).
   cfAnalyticsToken: '',
 

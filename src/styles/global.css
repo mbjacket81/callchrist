@@ -134,3 +134,16 @@ h2 { font-size: 1.45rem; margin: 2.5rem 0 0.75rem; }
 .category h2 { font-size: 1.15rem; margin: 0 0 0.85rem; color: var(--muted); font-family: var(--sans); font-weight: 600; }
 
 .prose p { margin: 0 0 1.1rem; }
+
+/* SendFox embed: match the site's inputs and button */
+.sendfox-embed form { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.sendfox-embed p { margin: 0; color: inherit; }
+.sendfox-embed label { position: absolute; left: -999px; }
+.sendfox-embed input[type=email], .sendfox-embed input[type=text] {
+  flex: 1 1 14rem; width: 100%; padding: 0.7rem 1rem; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--bg); color: var(--ink); font: inherit;
+}
+.sendfox-embed button, .sendfox-embed input[type=submit] {
+  background: var(--accent); color: #fff; border: 0; padding: 0.75rem 1.4rem; border-radius: 999px;
+  font: 600 1rem var(--sans); cursor: pointer;
+}
